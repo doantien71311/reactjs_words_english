@@ -5,17 +5,27 @@ import {
   FloatingLabel,
   Form,
   InputGroup,
+  Toast,
+  ToastContainer,
 } from "react-bootstrap";
 import {
   FormWordEnglishEditContext,
   type FormWordEnglishEditContextProps,
 } from "./FormWordEnglishContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GetAudioBaseStringByLink } from "../../../services/HttpGetFileServices";
 
 export const FormWordEnglishEdit = () => {
-  const { dataDictionaryApi, fetchDataDictionaryApi, dataApi, setDataApi } =
-    useContext<FormWordEnglishEditContextProps>(FormWordEnglishEditContext);
+  const {
+    dataDictionaryApi,
+    fetchDataDictionaryApi,
+    dataApi,
+    setDataApi,
+    saveDataApi,
+  } = useContext<FormWordEnglishEditContextProps>(FormWordEnglishEditContext);
+
+  const [show, setShow] = useState(false);
+
   //#region các hàm xử lý
   const onClickGetData = async () => {
     await fetchDataDictionaryApi();
@@ -48,9 +58,31 @@ export const FormWordEnglishEdit = () => {
       ...dataApi,
     });
   };
+
+  const handleChangeSaveDataApi = () => {
+    setShow(false);
+    saveDataApi();
+    setShow(true);
+  };
+
   //#endregion các hàm
   return (
     <>
+      <ToastContainer
+        className="p-3"
+        position="top-center"
+        style={{ zIndex: 10 }}
+      >
+        <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
+          <Toast.Header closeButton={false}>
+            <strong className="me-auto">Thông báo</strong>
+          </Toast.Header>
+          <Toast.Body className="text-success fw-bold">
+            Lưu thành công
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       <Accordion
         className="mb-3"
         defaultActiveKey={["0", "1", "2", "3", "4", "5"]}
@@ -180,7 +212,12 @@ export const FormWordEnglishEdit = () => {
         </Accordion.Item>
       </Accordion>
 
-      <Button variant="primary" size="lg" type="submit">
+      <Button
+        variant="primary"
+        size="lg"
+        type="submit"
+        onClick={() => handleChangeSaveDataApi()}
+      >
         Save
       </Button>
     </>

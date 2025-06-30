@@ -2,6 +2,8 @@ import { useState, createContext, type ReactNode } from "react";
 import type { ResponseApiDictionaryType } from "../../../model/ResponseApiDictionaryType";
 import { GetWords } from "../../../services/HttpDictionaryServices";
 import type { WordEnglishType } from "../../../model/WordEnglishType";
+import { PostRowData } from "../../../services/HttpServices";
+import UrlApi from "../../../services/UrlApi";
 
 export type FormWordEnglishEditContextProps = {
   dataDictionaryApi: ResponseApiDictionaryType;
@@ -10,7 +12,7 @@ export type FormWordEnglishEditContextProps = {
   //
   dataApi: WordEnglishType;
   setDataApi: (value: WordEnglishType) => void;
-  saveDataApi: (value: WordEnglishType) => void;
+  saveDataApi: () => void;
   //
   //   setDataDictionaryToDataApi: () => void;
 };
@@ -52,12 +54,16 @@ export const FormWordEnglishEditProvider = ({
     });
   }
   async function saveDataApi() {
-    // const dataApi = await GetWords("sink");
-    // setDataDictionaryApi(dataApi);
+    const data = await PostRowData(
+      `${UrlApi.api_app_words_english_create_update}`,
+      dataApi
+    );
+    console.log(data);
   }
   //#endregion cách hàm thao tác
 
   return (
+    
     <FormWordEnglishEditContext.Provider
       value={{
         dataDictionaryApi: dataDictionaryApi,
