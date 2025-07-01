@@ -7,14 +7,13 @@ import {
 } from "react";
 import type { ResponseApiDictionaryType } from "../../../model/ResponseApiDictionaryType";
 import { GetWords } from "../../../services/HttpDictionaryServices";
-import type {
-  ListSentenceType,
-  WordEnglishType,
-} from "../../../model/WordEnglishType";
+import type { WordEnglishType } from "../../../model/WordEnglishType";
 // import { PostRowData } from "../../../services/HttpServices";
 // import UrlApi from "../../../services/UrlApi";
 import { v4 as uuidv4 } from "uuid";
 import { getTextIPA } from "../../../utils/utilsFunction";
+import { PostRowData } from "../../../services/HttpServices";
+import UrlApi from "../../../services/UrlApi";
 
 export type FormWordEnglishEditContextProps = {
   dataDictionaryApi: ResponseApiDictionaryType;
@@ -51,32 +50,29 @@ export const FormWordEnglishEditProvider = ({
   //
   const [dataDictionaryApi, setDataDictionaryApi] =
     useState<ResponseApiDictionaryType>({});
-  const list_sentences: ListSentenceType[] = [];
-  list_sentences.push({
-    id: uuidv4(),
-    soid: uuidv4(),
-    sentence_en: "asdasd",
-  });
+
   const [dataApi, setDataApi] = useState<WordEnglishType>({
     soid: uuidv4(),
-    list_sentences: list_sentences,
   });
 
   useEffect(() => {
     if (intialized.current) return;
     intialized.current = true;
 
-    // const list_sentences: ListSentenceType[] = [];
-    // list_sentences.push({
-    //   id: uuidv4(),
-    //   soid: dataApi.soid,
-    // });
-    // dataApi.list_sentences = list_sentences;
-    console.log(dataApi);
-    // setDataApi(dataApi);
-
+    //dùng cho trường hợp thêm mới
+    setDataApi({
+      ...dataApi,
+      list_sentences: [
+        ...[],
+        {
+          id: uuidv4(),
+          soid: dataApi.soid,
+        },
+      ],
+    });
+    //
     return () => {
-      console.log("useEffect clean");
+      console.log("useEffect clean FormWordEnglishEditProvider");
     };
   });
 
@@ -92,11 +88,11 @@ export const FormWordEnglishEditProvider = ({
     });
   }
   async function saveDataApi() {
-    // const data = await PostRowData(
-    //   `${UrlApi.api_app_words_english_create_update}`,
-    //   dataApi
-    // );
-    console.log(dataApi);
+    const data = await PostRowData(
+      `${UrlApi.api_app_words_english_create_update}`,
+      dataApi
+    );
+    console.log(data);
   }
   //#endregion cách hàm thao tác
 
