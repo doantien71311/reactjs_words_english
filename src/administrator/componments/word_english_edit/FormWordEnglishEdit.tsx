@@ -7,6 +7,7 @@ import {
   InputGroup,
   Toast,
   ToastContainer,
+  Image,
 } from "react-bootstrap";
 import {
   FormWordEnglishEditContext,
@@ -64,13 +65,37 @@ export const FormWordEnglishEdit = () => {
     saveDataApi();
     setShow(true);
   };
+  const handleFileChangeIllustrationImage = (
+    event: React.ChangeEvent<HTMLInputElement> | undefined
+  ) => {
+    if (!event) return;
+    const files = event.currentTarget.files;
+    if (!files) return;
+    const file = files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      setDataApi({
+        ...dataApi,
+        word_base_image: base64String as string,
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleFileDeleteIllustrationImage = () => {
+    setDataApi({
+      ...dataApi,
+      word_base_image: "",
+    });
+  };
 
   //#endregion các hàm
   return (
     <>
       <ToastContainer
         className="p-3"
-        position="top-center"
+        position="bottom-center"
         style={{ zIndex: 10 }}
       >
         <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
@@ -89,8 +114,8 @@ export const FormWordEnglishEdit = () => {
         alwaysOpen
       >
         <Accordion.Item eventKey="0">
-          <Accordion.Header className="text-center text-xl text-success fw-bold">
-            <Form.Label className="text-center text-xl text-success fw-bold">
+          <Accordion.Header className="">
+            <Form.Label className="w-100 text-center text-xl text-success fw-bold">
               The word English
             </Form.Label>
           </Accordion.Header>
@@ -112,7 +137,7 @@ export const FormWordEnglishEdit = () => {
         </Accordion.Item>
         <Accordion.Item eventKey="1">
           <Accordion.Header>
-            <Form.Label className="text-center text-info fw-bold">
+            <Form.Label className="w-100 text-center text-info fw-bold">
               IPA
             </Form.Label>
           </Accordion.Header>
@@ -129,7 +154,7 @@ export const FormWordEnglishEdit = () => {
         </Accordion.Item>
         <Accordion.Item eventKey="2">
           <Accordion.Header>
-            <Form.Label className="text-center text-secondary fw-bold">
+            <Form.Label className="w-100  text-center text-secondary fw-bold">
               Pronounce
             </Form.Label>
           </Accordion.Header>
@@ -156,7 +181,7 @@ export const FormWordEnglishEdit = () => {
         </Accordion.Item>
         <Accordion.Item eventKey="3">
           <Accordion.Header>
-            <Form.Label className="text-center text-warning fw-bold">
+            <Form.Label className="w-100 text-center text-warning fw-bold">
               Từ tiếng việt
             </Form.Label>
           </Accordion.Header>
@@ -174,6 +199,29 @@ export const FormWordEnglishEdit = () => {
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="4">
+          <Accordion.Header>
+            <Form.Label className="w-100 text-center text-secondary fw-bold">
+              Illustration Image
+            </Form.Label>
+          </Accordion.Header>
+          <Accordion.Body>
+            <Form.Group>
+              <Form.Label>1000px-1000px, 100KB</Form.Label>
+              <InputGroup>
+                <Button onClick={() => handleFileDeleteIllustrationImage()}>
+                  Delete image
+                </Button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => handleFileChangeIllustrationImage(event)}
+                />
+              </InputGroup>
+              <Image src={dataApi.word_base_image ?? ""} fluid></Image>
+            </Form.Group>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="5">
           <Accordion.Header>
             <Form.Label className="text-center fw-bold">
               The sentence

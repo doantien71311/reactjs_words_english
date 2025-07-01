@@ -3,6 +3,7 @@ export type WordEnglishType = {
   ipa?: string;
   word_translation?: string;
   word_base_audio?: string;
+  word_base_image?: string;
   list_sentences?: ListSentenceType[];
   list_words?: ListWordType[];
 };
