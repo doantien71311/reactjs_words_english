@@ -69,7 +69,7 @@ export const FormWordEnglishEdit = () => {
   // };
 
   const handleChangeSaveDataApi = () => {
-    setShow(false);
+    // setShow(false);
     saveDataApi();
     setShow(true);
   };
