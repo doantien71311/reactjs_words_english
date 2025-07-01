@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 // import { GetWords } from "./services/HttpDictionaryServices";
 // import { GetAudioBaseStringByLink } from "./services/HttpGetFileServices";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { FormWordEnglishIndex } from "./administrator/componments/word_english_edit/FormWordEnglishIndex";
 
 function App() {

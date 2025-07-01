@@ -1,4 +1,5 @@
 export type WordEnglishType = {
+  soid: string;
   word_en?: string;
   ipa?: string;
   word_translation?: string;

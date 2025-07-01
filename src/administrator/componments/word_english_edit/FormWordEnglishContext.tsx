@@ -1,9 +1,20 @@
-import { useState, createContext, type ReactNode } from "react";
+import {
+  useState,
+  createContext,
+  type ReactNode,
+  useEffect,
+  useRef,
+} from "react";
 import type { ResponseApiDictionaryType } from "../../../model/ResponseApiDictionaryType";
 import { GetWords } from "../../../services/HttpDictionaryServices";
-import type { WordEnglishType } from "../../../model/WordEnglishType";
-import { PostRowData } from "../../../services/HttpServices";
-import UrlApi from "../../../services/UrlApi";
+import type {
+  ListSentenceType,
+  WordEnglishType,
+} from "../../../model/WordEnglishType";
+// import { PostRowData } from "../../../services/HttpServices";
+// import UrlApi from "../../../services/UrlApi";
+import { v4 as uuidv4 } from "uuid";
+import { getTextIPA } from "../../../utils/utilsFunction";
 
 export type FormWordEnglishEditContextProps = {
   dataDictionaryApi: ResponseApiDictionaryType;
@@ -24,7 +35,7 @@ export const FormWordEnglishEditContext =
     setDataDictionaryApi: () => {},
     fetchDataDictionaryApi: () => {},
     //
-    dataApi: {},
+    dataApi: { soid: uuidv4() },
     setDataApi: () => {},
     saveDataApi: () => {},
     //
@@ -36,11 +47,38 @@ export const FormWordEnglishEditProvider = ({
 }: {
   children: ReactNode;
 }) => {
+  const intialized = useRef(false);
   //
   const [dataDictionaryApi, setDataDictionaryApi] =
     useState<ResponseApiDictionaryType>({});
+  const list_sentences: ListSentenceType[] = [];
+  list_sentences.push({
+    id: uuidv4(),
+    soid: uuidv4(),
+    sentence_en: "asdasd",
+  });
+  const [dataApi, setDataApi] = useState<WordEnglishType>({
+    soid: uuidv4(),
+    list_sentences: list_sentences,
+  });
 
-  const [dataApi, setDataApi] = useState<WordEnglishType>({});
+  useEffect(() => {
+    if (intialized.current) return;
+    intialized.current = true;
+
+    // const list_sentences: ListSentenceType[] = [];
+    // list_sentences.push({
+    //   id: uuidv4(),
+    //   soid: dataApi.soid,
+    // });
+    // dataApi.list_sentences = list_sentences;
+    console.log(dataApi);
+    // setDataApi(dataApi);
+
+    return () => {
+      console.log("useEffect clean");
+    };
+  });
 
   //#region cách hàm thao tác
   async function fetchDataDictionaryApi() {
@@ -50,20 +88,19 @@ export const FormWordEnglishEditProvider = ({
     setDataApi({
       ...dataApi,
       word_en: dataDicApi.word ?? "",
-      ipa: dataDicApi.phonetic ?? "",
+      ipa: getTextIPA(dataDicApi.phonetic ?? ""),
     });
   }
   async function saveDataApi() {
-    const data = await PostRowData(
-      `${UrlApi.api_app_words_english_create_update}`,
-      dataApi
-    );
-    console.log(data);
+    // const data = await PostRowData(
+    //   `${UrlApi.api_app_words_english_create_update}`,
+    //   dataApi
+    // );
+    console.log(dataApi);
   }
   //#endregion cách hàm thao tác
 
   return (
-    
     <FormWordEnglishEditContext.Provider
       value={{
         dataDictionaryApi: dataDictionaryApi,
