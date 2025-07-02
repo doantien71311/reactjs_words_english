@@ -55,4 +55,52 @@ export const PostRowData = <T,>(
   });
 };
 
+export const GetArrayData = <T,>(api: string): Promise<Array<T>> => {
+  return new Promise<Array<T>>((resolve) => {
+    getTokenString().then((token) => {
+      const api_url_post = `${UrlApi.getApiHttp()}${api}`;
+      fetch(api_url_post, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          let value: T[] = [];
+          if (json.data) {
+            value = json.data as T[];
+          }
+          return resolve(value);
+        })
+        .catch(() => {
+          return resolve([]);
+        });
+    });
+  });
+};
+
+export const GetRowData = <T,>(api: string, id: string): Promise<T> => {
+  return new Promise<T>((resolve) => {
+    getTokenString().then((token) => {
+      const api_url_post = `${UrlApi.getApiHttp()}${api}?id=${id}`;
+      fetch(api_url_post, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          const value: T = json.data as T;
+          return resolve(value);
+        })
+        .catch(() => {
+          const value: T = null as T;
+          return resolve(value);
+        });
+    });
+  });
+};
+
 /*#endregion các hàm publish */

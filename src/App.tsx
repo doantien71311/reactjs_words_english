@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 // import { GetAudioBaseStringByLink } from "./services/HttpGetFileServices";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { FormWordEnglishIndex } from "./administrator/componments/word_english_edit/FormWordEnglishIndex";
+import { EnglishDisplayIndex } from "./administrator/componments/word_english_display/EnglishDisplayIndex";
 
 function App() {
   // const [audioValue, setAudioVallue] = useState("");
@@ -42,7 +42,8 @@ function App() {
 
   return (
     <>
-      <FormWordEnglishIndex></FormWordEnglishIndex>
+      <EnglishDisplayIndex></EnglishDisplayIndex>
+      {/* <FormWordEnglishIndex></FormWordEnglishIndex> */}
       {/* <div>{audioValue}</div>
       <audio controls src={audioValue}></audio>
       <div>from html</div>

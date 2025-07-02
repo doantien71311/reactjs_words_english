@@ -12,8 +12,9 @@ import type { WordEnglishType } from "../../../model/WordEnglishType";
 // import UrlApi from "../../../services/UrlApi";
 import { v4 as uuidv4 } from "uuid";
 import { getTextIPA } from "../../../utils/utilsFunction";
-import { PostRowData } from "../../../services/HttpServices";
+import { GetRowData, PostRowData } from "../../../services/HttpServices";
 import UrlApi from "../../../services/UrlApi";
+import { useParams } from "react-router-dom";
 
 export type FormWordEnglishEditContextProps = {
   dataDictionaryApi: ResponseApiDictionaryType;
@@ -47,6 +48,7 @@ export const FormWordEnglishEditProvider = ({
   children: ReactNode;
 }) => {
   const intialized = useRef(false);
+  const { keyString, isAddNew } = useParams();
   //
   const [dataDictionaryApi, setDataDictionaryApi] =
     useState<ResponseApiDictionaryType>({});
@@ -58,33 +60,26 @@ export const FormWordEnglishEditProvider = ({
   useEffect(() => {
     if (intialized.current) return;
     intialized.current = true;
-
-    //dùng cho trường hợp thêm mới
-    setDataApi({
-      ...dataApi,
-      list_sentences: [
-        ...[],
-        {
-          id: uuidv4(),
-          soid: dataApi.soid,
-        },
-      ],
-    });
+    fechDataApi();
     //
     return () => {
       console.log("useEffect clean FormWordEnglishEditProvider");
     };
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keyString, isAddNew]);
 
   //#region cách hàm thao tác
   async function fetchDataDictionaryApi() {
     const dataDicApi = await GetWords(dataApi.word_en ?? "");
+    const checkWordEn =
+      (dataDicApi.word ?? "") != (dataDictionaryApi.word ?? "") ? false : true;
     setDataDictionaryApi(dataDicApi);
     console.log(dataDicApi);
     setDataApi({
       ...dataApi,
       word_en: dataDicApi.word ?? "",
       ipa: getTextIPA(dataDicApi.phonetic ?? ""),
+      word_base_audio: checkWordEn ? dataApi.word_base_audio : "",
     });
   }
   async function saveDataApi() {
@@ -94,6 +89,33 @@ export const FormWordEnglishEditProvider = ({
     );
     console.log(data);
   }
+
+  async function fechDataApi() {
+    const data = await GetRowData<WordEnglishType>(
+      `${UrlApi.api_app_words_english_get_file}`,
+      keyString ?? ""
+    );
+    let pIsAddNew = isAddNew;
+    if (data != null) pIsAddNew = "false";
+    if (pIsAddNew?.toUpperCase() == "TRUE") {
+      //dùng cho trường hợp thêm mới
+      setDataApi({
+        ...dataApi,
+        list_sentences: [
+          ...[],
+          {
+            id: uuidv4(),
+            soid: dataApi.soid,
+          },
+        ],
+      });
+    } else {
+      //dùng cho trường hợp edit
+      setDataApi(data);
+    }
+    console.log(data);
+  }
+
   //#endregion cách hàm thao tác
 
   return (

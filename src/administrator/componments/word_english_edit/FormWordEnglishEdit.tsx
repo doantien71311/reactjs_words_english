@@ -251,6 +251,7 @@ export const FormWordEnglishEdit = () => {
                 />
               </Stack>
               <Image
+                key={`${dataApi.soid}-illustration-image`}
                 src={dataApi.word_base_image ?? "data:image/gif;base64,"}
                 fluid
               ></Image>

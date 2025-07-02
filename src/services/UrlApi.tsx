@@ -15,6 +15,10 @@ class UrlApi {
   static api_auth_token: string = "/api/auth-token";
   static api_app_words_english_create_update: string =
     "/api/app-words-english-create-update";
+  static api_app_words_english_get_list: string =
+    "/api/app-words-english-get-list";
+  static api_app_words_english_get_file: string =
+    "/api/app-words-english-get-file";
   //
   static api_v2_entries_en: string = "/api/v2/entries/en";
 }
