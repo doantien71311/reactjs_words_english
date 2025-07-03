@@ -18,6 +18,7 @@ import { GetAudioBaseStringByLink } from "../../../services/HttpGetFileServices"
 import { ItemWordEnglishSentence } from "./ItemWordEnglishSentence";
 import { v4 as uuidv4 } from "uuid";
 import { getAudioTitle } from "../../../utils/utilsFunction";
+import imageCompression from "browser-image-compression";
 
 export const FormWordEnglishEdit = () => {
   const {
@@ -30,6 +31,7 @@ export const FormWordEnglishEdit = () => {
 
   const [show, setShow] = useState(false);
   const audioIPA = useRef<HTMLAudioElement>(null);
+  const [imageInfo, setImageInfo] = useState("");
 
   //#region các hàm xử lý
   const onClickGetData = async () => {
@@ -39,6 +41,12 @@ export const FormWordEnglishEdit = () => {
     setDataApi({
       ...dataApi,
       word_en: event,
+    });
+  };
+  const handleChangeWordIPA = (event: string) => {
+    setDataApi({
+      ...dataApi,
+      ipa: event,
     });
   };
   const handleChangeAudioIPA = (urlAudio: string) => {
@@ -73,13 +81,41 @@ export const FormWordEnglishEdit = () => {
     saveDataApi();
     setShow(true);
   };
-  const handleFileChangeIllustrationImage = (
+  // const handleFileChangeIllustrationImage_Old = (
+  //   event: React.ChangeEvent<HTMLInputElement> | undefined
+  // ) => {
+  //   if (!event) return;
+  //   const files = event.currentTarget.files;
+  //   if (!files) return;
+  //   const file = files[0];
+  //   const reader = new FileReader();
+  //   reader.onloadend = () => {
+  //     const base64String = reader.result;
+  //     setDataApi({
+  //       ...dataApi,
+  //       word_base_image: base64String as string,
+  //     });
+  //   };
+  //   reader.readAsDataURL(file);
+  // };
+
+  const handleFileChangeIllustrationImage = async (
     event: React.ChangeEvent<HTMLInputElement> | undefined
   ) => {
     if (!event) return;
     const files = event.currentTarget.files;
     if (!files) return;
-    const file = files[0];
+    const imageFile = files[0];
+    const options = {
+      maxSizeMB: 0.15,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+    //
+    const compressedFile = await imageCompression(imageFile, options);
+    const sizeImage = `${Math.round(compressedFile.size / 1024)} KB`;
+    setImageInfo(sizeImage);
+    //
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64String = reader.result;
@@ -88,7 +124,7 @@ export const FormWordEnglishEdit = () => {
         word_base_image: base64String as string,
       });
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(compressedFile);
   };
 
   const handleFileDeleteIllustrationImage = () => {
@@ -163,9 +199,10 @@ export const FormWordEnglishEdit = () => {
             <Form.Control
               type="text"
               size="lg"
-              readOnly
+              // readOnly
               placeholder=""
               value={dataApi.ipa ?? ""}
+              onChange={(event) => handleChangeWordIPA(event.target.value)}
               className="text-center text-xl text-info fw-bold"
             />
           </Accordion.Body>
@@ -232,7 +269,7 @@ export const FormWordEnglishEdit = () => {
           <Accordion.Body>
             <Form.Group>
               <Form.Label className="text-sm-left">
-                File image 1000px-1000px, 100KB
+                {`File image (JPG) 1000px-1000px, 200KB; compress ${imageInfo}`}
               </Form.Label>
               <Stack direction="horizontal" gap={2}>
                 <Button
