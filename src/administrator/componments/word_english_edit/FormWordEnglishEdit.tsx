@@ -237,7 +237,7 @@ export const FormWordEnglishEdit = () => {
         </Accordion.Item>
         <Accordion.Item eventKey="2">
           <Accordion.Header>
-            <Form.Label className="w-100  text-center text-secondary fw-bold">
+            <Form.Label className="w-100 text-center text-secondary fw-bold">
               Pronounce
             </Form.Label>
           </Accordion.Header>
