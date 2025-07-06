@@ -1,5 +1,5 @@
 export type ResponseApiType = {
-  status: string;
+  status?: string;
   message?: string;
   data?: string;
 };

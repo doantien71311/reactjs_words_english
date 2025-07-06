@@ -9,14 +9,34 @@ export const GetWords = (word: string): Promise<ResponseApiDictionaryType> => {
       UrlApi.api_v2_entries_en
     }/${word}`;
 
-    fetch(url_api_get, {
-      method: "GET",
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        const value = json as ResponseApiDictionaryType[];
-        return resolve(value[0]);
+    try {
+      fetch(url_api_get, {
+        method: "GET",
+      })
+        .then((res) => {
+          if (res.ok) return res.json();
+          return resolve({
+            word: word,
+          });
+        })
+        .then((json) => {
+          const value = json as ResponseApiDictionaryType[];
+          return resolve(value[0]);
+        })
+        .catch(() => {
+          // console.log("aaa");
+          // console.log(error);
+          return resolve({
+            word: word,
+          });
+        });
+    } catch {
+      console.log("AAAAAAAAA");
+      // console.log(error);
+      return resolve({
+        word: word,
       });
+    }
   });
 };
 

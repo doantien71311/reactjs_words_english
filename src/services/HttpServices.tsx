@@ -45,7 +45,7 @@ export const PostRowData = <T,>(
       })
         .then((res) => res.json())
         .then((json) => {
-          const value = json.data.google_drive as ResponseApiType;
+          const value = json as ResponseApiType;
           return resolve(value);
         })
         .catch(() => {

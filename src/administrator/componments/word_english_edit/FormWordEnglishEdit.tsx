@@ -13,7 +13,7 @@ import {
   FormWordEnglishEditContext,
   type FormWordEnglishEditContextProps,
 } from "./FormWordEnglishContext";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { GetAudioBaseStringByLink } from "../../../services/HttpGetFileServices";
 import { ItemWordEnglishSentence } from "./ItemWordEnglishSentence";
 import { v4 as uuidv4 } from "uuid";
@@ -27,11 +27,18 @@ export const FormWordEnglishEdit = () => {
     dataApi,
     setDataApi,
     saveDataApi,
+    saveNewDataApi,
+    isSavingDataApi,
+    responseApi,
   } = useContext<FormWordEnglishEditContextProps>(FormWordEnglishEditContext);
 
   const [show, setShow] = useState(false);
   const audioIPA = useRef<HTMLAudioElement>(null);
   const [imageInfo, setImageInfo] = useState("");
+
+  useEffect(() => {
+    setShow(isSavingDataApi == "saved");
+  }, [isSavingDataApi]);
 
   //#region các hàm xử lý
   const onClickGetData = async () => {
@@ -77,27 +84,11 @@ export const FormWordEnglishEdit = () => {
   // };
 
   const handleChangeSaveDataApi = () => {
-    // setShow(false);
     saveDataApi();
-    setShow(true);
   };
-  // const handleFileChangeIllustrationImage_Old = (
-  //   event: React.ChangeEvent<HTMLInputElement> | undefined
-  // ) => {
-  //   if (!event) return;
-  //   const files = event.currentTarget.files;
-  //   if (!files) return;
-  //   const file = files[0];
-  //   const reader = new FileReader();
-  //   reader.onloadend = () => {
-  //     const base64String = reader.result;
-  //     setDataApi({
-  //       ...dataApi,
-  //       word_base_image: base64String as string,
-  //     });
-  //   };
-  //   reader.readAsDataURL(file);
-  // };
+  const handleChangeSaveNewDataApi = () => {
+    saveNewDataApi();
+  };
 
   const handleFileChangeIllustrationImage = async (
     event: React.ChangeEvent<HTMLInputElement> | undefined
@@ -148,6 +139,12 @@ export const FormWordEnglishEdit = () => {
     navigator.clipboard.writeText(dataApi.word_en ?? "");
   };
 
+  const getStatus = () => {
+    let text_status = "text-danger";
+    if ((responseApi.status ?? "") == "200") text_status = "text-success";
+    return `${text_status} fw-bold`;
+  };
+
   //#endregion các hàm
   return (
     <>
@@ -160,11 +157,13 @@ export const FormWordEnglishEdit = () => {
           <Toast.Header closeButton={false}>
             <strong className="me-auto">Thông báo</strong>
           </Toast.Header>
-          <Toast.Body className="text-success fw-bold">
-            Lưu thành công
+          <Toast.Body className={getStatus()}>
+            {responseApi.message ?? ""}
           </Toast.Body>
         </Toast>
       </ToastContainer>
+
+      <div></div>
 
       <Accordion
         className=""
@@ -357,19 +356,72 @@ export const FormWordEnglishEdit = () => {
 
       <div style={{ height: "50px" }}></div>
 
-      <Button
-        className="w-100 fixed-bottom"
-        variant="success"
-        size="lg"
-        type="submit"
-        onClick={() => handleChangeSaveDataApi()}
+      <Stack
+        direction="horizontal"
+        style={{ border: "1px solid back" }}
+        gap={1}
+        className="w-100 m-0 fixed-bottom mx-auto"
       >
-        {/* <Stack direction="horizontal" gap={2}>
-          <i className="bi bi-check-circle"></i>
-          <span>Save</span>
-        </Stack> */}
-        <span>Save</span>
-      </Button>
+        <div className="ms-auto"></div>
+        <Button
+          disabled={isSavingDataApi == "saving"}
+          variant="success"
+          // className="m-10"
+          size="sm"
+          onClick={() => handleChangeSaveDataApi()}
+        >
+          <Stack>
+            <i className="bi bi-chevron-left"></i>
+            <span>Back</span>
+          </Stack>
+        </Button>
+        <Button
+          disabled={isSavingDataApi == "saving"}
+          variant="success"
+          size="sm"
+          onClick={() => handleChangeSaveDataApi()}
+        >
+          <Stack>
+            <i className="bi bi-check-circle"></i>
+            <span>Save Update</span>
+          </Stack>
+        </Button>
+
+        <Button
+          disabled={isSavingDataApi == "saving"}
+          variant="success"
+          size="sm"
+          onClick={() => handleChangeSaveNewDataApi()}
+        >
+          <Stack>
+            <i className="bi bi-plus-circle"></i>
+            <span>Save New</span>
+          </Stack>
+        </Button>
+        <Button
+          disabled={isSavingDataApi == "saving"}
+          variant="success"
+          size="sm"
+          onClick={() => handleChangeSaveDataApi()}
+        >
+          <Stack>
+            <i className="bi bi-arrow-left-circle"></i>
+            <span>Save Back</span>
+          </Stack>
+        </Button>
+        <Button
+          disabled={isSavingDataApi == "saving"}
+          variant="success"
+          size="sm"
+          onClick={() => handleChangeSaveDataApi()}
+        >
+          <Stack>
+            <i className="bi bi-dash-circle"></i>
+            <span>Save Draft</span>
+          </Stack>
+        </Button>
+        <div className="ms-auto"></div>
+      </Stack>
     </>
   );
 };

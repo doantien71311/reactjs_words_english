@@ -15,6 +15,7 @@ import { getTextIPA } from "../../../utils/utilsFunction";
 import { GetRowData, PostRowData } from "../../../services/HttpServices";
 import UrlApi from "../../../services/UrlApi";
 import { useParams } from "react-router-dom";
+import { type ResponseApiType } from "../../../model/ResponseApiType";
 
 export type FormWordEnglishEditContextProps = {
   dataDictionaryApi: ResponseApiDictionaryType;
@@ -24,6 +25,11 @@ export type FormWordEnglishEditContextProps = {
   dataApi: WordEnglishType;
   setDataApi: (value: WordEnglishType) => void;
   saveDataApi: () => void;
+  saveNewDataApi: () => void;
+  isSavingDataApi: string;
+  setSavingDataApi: (value: string) => void;
+  responseApi: ResponseApiType;
+  setResponseApi: (value: ResponseApiType) => void;
   //
   //   setDataDictionaryToDataApi: () => void;
 };
@@ -38,6 +44,12 @@ export const FormWordEnglishEditContext =
     dataApi: { soid: uuidv4() },
     setDataApi: () => {},
     saveDataApi: () => {},
+    saveNewDataApi: () => {},
+    isSavingDataApi: "",
+    setSavingDataApi: () => {},
+    responseApi: {},
+    setResponseApi: () => {},
+
     //
     // setDataDictionaryToDataApi: () => {},
   });
@@ -52,6 +64,8 @@ export const FormWordEnglishEditProvider = ({
   //
   const [dataDictionaryApi, setDataDictionaryApi] =
     useState<ResponseApiDictionaryType>({});
+  const [responseApi, setResponseApi] = useState<ResponseApiType>({});
+  const [isSavingDataApi, setSavingDataApi] = useState("");
 
   const [dataApi, setDataApi] = useState<WordEnglishType>({
     soid: uuidv4(),
@@ -82,12 +96,39 @@ export const FormWordEnglishEditProvider = ({
       word_base_audio: checkWordEn ? dataApi.word_base_audio : "",
     });
   }
-  async function saveDataApi() {
+  async function saveDataApi(isAddNew: boolean = false) {
+    setSavingDataApi("saving");
+    // console.log(JSON.stringify(dataApi));
     const data = await PostRowData(
       `${UrlApi.api_app_words_english_create_update}`,
       dataApi
     );
-    console.log(data);
+    // console.log(data);
+    setResponseApi(data);
+    setSavingDataApi("saved");
+
+    if (isAddNew) {
+      if ((data.status ?? "") == "200") {
+        console.log("saveNewDataApi");
+        const soid = uuidv4();
+        setDataApi({
+          ...{
+            soid: soid,
+          },
+          list_sentences: [
+            ...[],
+            {
+              id: uuidv4(),
+              soid: soid,
+            },
+          ],
+        });
+      }
+    }
+  }
+
+  async function saveNewDataApi() {
+    await saveDataApi(true);
   }
 
   async function fechDataApi() {
@@ -128,6 +169,12 @@ export const FormWordEnglishEditProvider = ({
         dataApi: dataApi,
         setDataApi: setDataApi,
         saveDataApi: saveDataApi,
+        saveNewDataApi: saveNewDataApi,
+        //
+        isSavingDataApi: isSavingDataApi,
+        setSavingDataApi: setSavingDataApi,
+        responseApi: responseApi,
+        setResponseApi: setResponseApi,
       }}
     >
       {children}
