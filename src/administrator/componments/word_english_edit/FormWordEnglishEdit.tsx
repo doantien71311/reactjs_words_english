@@ -269,7 +269,7 @@ export const FormWordEnglishEdit = () => {
             </Form.Label>
             <Stack className="" direction="horizontal" gap={1}>
               <div className="ms-auto"></div>
-              <a href={`https://www.soundoftext.com/`} target="_blank">
+              <a href={`https://soundoftext.com/`} target="_blank">
                 <Button size="sm" variant="outline-secondary">
                   <i className="bi bi-link"></i>
                 </Button>
