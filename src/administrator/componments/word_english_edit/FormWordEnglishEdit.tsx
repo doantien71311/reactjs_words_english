@@ -144,6 +144,10 @@ export const FormWordEnglishEdit = () => {
     });
   };
 
+  const onCoppData = () => {
+    navigator.clipboard.writeText(dataApi.word_en ?? "");
+  };
+
   //#endregion các hàm
   return (
     <>
@@ -183,10 +187,34 @@ export const FormWordEnglishEdit = () => {
                 value={dataApi.word_en ?? ""}
                 onChange={(event) => handleChangeWordEn(event.target.value)}
               />
-              <Button variant="info" onClick={() => onClickGetData()}>
-                GET API
-              </Button>
             </InputGroup>
+            <Stack direction="horizontal" gap={3}>
+              <div className="ms-auto"> </div>
+              <Button
+                className=""
+                variant="outline-secondary"
+                onClick={() => onClickGetData()}
+              >
+                <i className="bi bi-cloud-download"></i>
+              </Button>
+              <a
+                className=""
+                href={`https://vdict.com/${dataApi.word_en ?? ""},1,0,0.html`}
+                target="_blank"
+              >
+                <Button className="m-1" variant="outline-secondary">
+                  <i className="bi bi-link"></i>
+                </Button>
+              </a>
+              <Button
+                className=""
+                variant="outline-secondary"
+                onClick={() => onCoppData()}
+              >
+                <i className="bi bi-copy"></i>
+              </Button>
+              <div className="ms-auto"> </div>
+            </Stack>
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="1">
@@ -239,6 +267,15 @@ export const FormWordEnglishEdit = () => {
                 src={dataApi.word_base_audio ?? "data:audio/mp3;base64"}
               ></audio>
             </Form.Label>
+            <Stack className="" direction="horizontal" gap={1}>
+              <div className="ms-auto"></div>
+              <a href={`https://www.soundoftext.com/`} target="_blank">
+                <Button size="sm" variant="outline-secondary">
+                  <i className="bi bi-link"></i>
+                </Button>
+              </a>
+              <div className="ms-auto"></div>
+            </Stack>
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="3">
@@ -271,10 +308,15 @@ export const FormWordEnglishEdit = () => {
               <Form.Label className="text-sm-left">
                 {`File image (JPG) 1000px-1000px, 200KB; compress ${imageInfo}`}
               </Form.Label>
-              <Stack direction="horizontal" gap={2}>
+              <Stack className="mb-3 mt-1" direction="horizontal" gap={3}>
+                <a href={`https://www.freepik.com/`} target="_blank">
+                  <Button size="sm" variant="outline-secondary">
+                    <i className="bi bi-link"></i>
+                  </Button>
+                </a>
                 <Button
                   size="sm"
-                  variant="secondary"
+                  variant="outline-secondary"
                   className=""
                   onClick={() => handleFileDeleteIllustrationImage()}
                 >
@@ -291,6 +333,7 @@ export const FormWordEnglishEdit = () => {
                 key={`${dataApi.soid}-illustration-image`}
                 src={dataApi.word_base_image ?? "data:image/gif;base64,"}
                 fluid
+                rounded
               ></Image>
             </Form.Group>
           </Accordion.Body>
