@@ -313,6 +313,11 @@ export const FormWordEnglishEdit = () => {
                     <i className="bi bi-link"></i>
                   </Button>
                 </a>
+                <a href={`https://www.pexels.com/`} target="_blank">
+                  <Button size="sm" variant="outline-secondary">
+                    <i className="bi bi-link"></i>
+                  </Button>
+                </a>
                 <Button
                   size="sm"
                   variant="outline-secondary"
@@ -363,18 +368,21 @@ export const FormWordEnglishEdit = () => {
         className="w-100 m-0 fixed-bottom mx-auto"
       >
         <div className="ms-auto"></div>
-        <Button
-          disabled={isSavingDataApi == "saving"}
-          variant="success"
-          // className="m-10"
-          size="sm"
-          onClick={() => handleChangeSaveDataApi()}
-        >
-          <Stack>
-            <i className="bi bi-chevron-left"></i>
-            <span>Back</span>
-          </Stack>
-        </Button>
+
+        <a href={`https://app-words-english.onrender.com/`}>
+          <Button
+            disabled={isSavingDataApi == "saving"}
+            variant="success"
+            // className="m-10"
+            size="sm"
+          >
+            <Stack>
+              <i className="bi bi-chevron-left"></i>
+              <span>Back</span>
+            </Stack>
+          </Button>
+        </a>
+
         <Button
           disabled={isSavingDataApi == "saving"}
           variant="success"
