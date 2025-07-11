@@ -75,6 +75,31 @@ export const FormWordEnglishEdit = () => {
     });
   };
 
+  const handleFileDeleteWordAudio = () => {
+    setDataApi({
+      ...dataApi,
+      word_base_audio: "",
+    });
+  };
+  const handleFileChangeWordAudio = (
+    event: React.ChangeEvent<HTMLInputElement> | undefined
+  ) => {
+    if (!event) return;
+    const files = event.currentTarget.files;
+    if (!files) return;
+    const file = files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (dataApi.list_sentences == null) return;
+      const base64String = reader.result as string;
+      setDataApi({
+        ...dataApi,
+        word_base_audio: base64String,
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
   // const handleChangeSentenceEn = (id: string, event: string) => {
   //   const row = (dataApi.list_sentences ?? []).filter((f) => f.id == id)[0];
   //   row.sentence_en = event;
@@ -177,7 +202,10 @@ export const FormWordEnglishEdit = () => {
             </Form.Label>
           </Accordion.Header>
           <Accordion.Body>
-            <InputGroup className="">
+            <InputGroup className="mt-1 mb-1">
+              <InputGroup.Text className="text-xl text-success fw-bold">
+                WOR
+              </InputGroup.Text>
               <Form.Control
                 size="lg"
                 type="text"
@@ -185,6 +213,36 @@ export const FormWordEnglishEdit = () => {
                 placeholder=""
                 value={dataApi.word_en ?? ""}
                 onChange={(event) => handleChangeWordEn(event.target.value)}
+              />
+            </InputGroup>
+
+            <InputGroup className="mt-1 mb-1">
+              <InputGroup.Text className="text-xl text-info fw-bold">
+                IPA
+              </InputGroup.Text>
+              <Form.Control
+                type="text"
+                size="lg"
+                // readOnly
+                placeholder=""
+                value={dataApi.ipa ?? ""}
+                onChange={(event) => handleChangeWordIPA(event.target.value)}
+                className="text-center text-xl text-info fw-bold"
+              />
+            </InputGroup>
+            <InputGroup className="mt-1 mb-1">
+              <InputGroup.Text className="text-warning fw-bold">
+                TRA
+              </InputGroup.Text>
+              <Form.Control
+                type="text"
+                size="lg"
+                placeholder=""
+                className="text-center text-warning fw-bold"
+                value={dataApi.word_translation ?? ""}
+                onChange={(event) =>
+                  handleChangeWordTranslation(event.target.value)
+                }
               />
             </InputGroup>
             <Stack direction="horizontal" gap={3}>
@@ -216,24 +274,7 @@ export const FormWordEnglishEdit = () => {
             </Stack>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="1">
-          <Accordion.Header>
-            <Form.Label className="w-100 text-center text-info fw-bold">
-              IPA
-            </Form.Label>
-          </Accordion.Header>
-          <Accordion.Body>
-            <Form.Control
-              type="text"
-              size="lg"
-              // readOnly
-              placeholder=""
-              value={dataApi.ipa ?? ""}
-              onChange={(event) => handleChangeWordIPA(event.target.value)}
-              className="text-center text-xl text-info fw-bold"
-            />
-          </Accordion.Body>
-        </Accordion.Item>
+
         <Accordion.Item eventKey="2">
           <Accordion.Header>
             <Form.Label className="w-100 text-center text-secondary fw-bold">
@@ -241,6 +282,33 @@ export const FormWordEnglishEdit = () => {
             </Form.Label>
           </Accordion.Header>
           <Accordion.Body>
+            <Form.Group className="mb-3">
+              {/* <Form.Label className="text-sm-left font-italic">
+                File audio, 100KB
+              </Form.Label> */}
+              <Stack direction="horizontal" gap={3}>
+                <a href={`https://soundoftext.com/`} target="_blank">
+                  <Button size="sm" variant="outline-secondary">
+                    <i className="bi bi-link"></i>
+                  </Button>
+                </a>
+
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  className=""
+                  onClick={() => handleFileDeleteWordAudio()}
+                >
+                  <i className="bi bi-file-x"></i>
+                </Button>
+                <input
+                  className=""
+                  type="file"
+                  accept="audio/*,audio/mp3,audio/m4a,audio/wav"
+                  onChange={(event) => handleFileChangeWordAudio(event)}
+                />
+              </Stack>
+            </Form.Group>
             {(dataDictionaryApi.phonetics ?? [])
               .filter((f) => (f.audio ?? "") != "")
               .map((item) => (
@@ -266,36 +334,9 @@ export const FormWordEnglishEdit = () => {
                 src={dataApi.word_base_audio ?? "data:audio/mp3;base64"}
               ></audio>
             </Form.Label>
-            <Stack className="" direction="horizontal" gap={1}>
-              <div className="ms-auto"></div>
-              <a href={`https://soundoftext.com/`} target="_blank">
-                <Button size="sm" variant="outline-secondary">
-                  <i className="bi bi-link"></i>
-                </Button>
-              </a>
-              <div className="ms-auto"></div>
-            </Stack>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="3">
-          <Accordion.Header>
-            <Form.Label className="w-100 text-center text-warning fw-bold">
-              Từ tiếng việt
-            </Form.Label>
-          </Accordion.Header>
-          <Accordion.Body>
-            <Form.Control
-              type="text"
-              size="lg"
-              placeholder=""
-              className="text-center text-warning fw-bold"
-              value={dataApi.word_translation ?? ""}
-              onChange={(event) =>
-                handleChangeWordTranslation(event.target.value)
-              }
-            />
-          </Accordion.Body>
-        </Accordion.Item>
+
         <Accordion.Item eventKey="4">
           <Accordion.Header>
             <Form.Label className="w-100 text-center text-secondary fw-bold">
@@ -314,6 +355,11 @@ export const FormWordEnglishEdit = () => {
                   </Button>
                 </a>
                 <a href={`https://www.pexels.com/`} target="_blank">
+                  <Button size="sm" variant="outline-secondary">
+                    <i className="bi bi-link"></i>
+                  </Button>
+                </a>
+                <a href={`https://pixabay.com/`} target="_blank">
                   <Button size="sm" variant="outline-secondary">
                     <i className="bi bi-link"></i>
                   </Button>
