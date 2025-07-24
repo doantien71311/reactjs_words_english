@@ -19,6 +19,8 @@ class UrlApi {
     "/api/app-words-english-get-list";
   static api_app_words_english_get_file: string =
     "/api/app-words-english-get-file";
+  static api_app_words_english_delete_file: string =
+    "/api/app-words-english-delete-file";
   //
   static api_v2_entries_en: string = "/api/v2/entries/en";
 }
