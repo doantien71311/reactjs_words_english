@@ -1,6 +1,7 @@
 import UrlApi from "./UrlApi";
 import type { ResponseApiType } from "../model/ResponseApiType";
 import ResponseStatus from "../model/ResponseStatus";
+import type { ParameterApiType } from "../model/ParameterApiType";
 
 /*#region các hàm publish */
 
@@ -29,11 +30,21 @@ export const getTokenString = (): Promise<string> => {
 
 export const PostRowData = <T,>(
   api: string,
-  data: T
+  data: T,
+  parameter?: ParameterApiType[]
 ): Promise<ResponseApiType> => {
   return new Promise<ResponseApiType>((resolve) => {
     getTokenString().then((token) => {
-      const api_url_post = `${UrlApi.getApiHttp()}${api}`;
+      let parameterQuery = "";
+      if (parameter) {
+        parameterQuery = parameter
+          .map((m) => {
+            return `${m.name}=${m.value}`;
+          })
+          .join("&");
+        parameterQuery = `?${parameterQuery}`;
+      }
+      const api_url_post = `${UrlApi.getApiHttp()}${api}${parameterQuery}`;
       fetch(api_url_post, {
         method: "POST",
         headers: {
@@ -56,10 +67,23 @@ export const PostRowData = <T,>(
   });
 };
 
-export const GetArrayData = <T,>(api: string): Promise<Array<T>> => {
+export const GetArrayData = <T,>(
+  api: string,
+  parameter?: ParameterApiType[]
+): Promise<Array<T>> => {
   return new Promise<Array<T>>((resolve) => {
     getTokenString().then((token) => {
-      const api_url_post = `${UrlApi.getApiHttp()}${api}`;
+      let parameterQuery = "";
+      if (parameter) {
+        parameterQuery = parameter
+          .map((m) => {
+            return `${m.name}=${m.value}`;
+          })
+          .join("&");
+        parameterQuery = `?${parameterQuery}`;
+      }
+      const api_url_post = `${UrlApi.getApiHttp()}${api}${parameterQuery}`;
+      console.log(api_url_post);
       fetch(api_url_post, {
         method: "GET",
         headers: {

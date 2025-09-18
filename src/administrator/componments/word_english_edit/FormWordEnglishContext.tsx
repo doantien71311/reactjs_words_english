@@ -16,6 +16,9 @@ import { GetRowData, PostRowData } from "../../../services/HttpServices";
 import UrlApi from "../../../services/UrlApi";
 import { useParams } from "react-router-dom";
 import { type ResponseApiType } from "../../../model/ResponseApiType";
+import type { ParameterQueryApiType } from "../../../model/ParameterQueryApiType";
+import IdDriveFolder from "../../../model/IdDriveFolder";
+import type { ParameterApiType } from "../../../model/ParameterApiType";
 
 export type FormWordEnglishEditContextProps = {
   dataDictionaryApi: ResponseApiDictionaryType;
@@ -30,6 +33,9 @@ export type FormWordEnglishEditContextProps = {
   setSavingDataApi: (value: string) => void;
   responseApi: ResponseApiType;
   setResponseApi: (value: ResponseApiType) => void;
+  //
+  parameterQuery: ParameterQueryApiType;
+  setParameterQuery: (value: ParameterQueryApiType) => void;
   //
   //   setDataDictionaryToDataApi: () => void;
 };
@@ -49,6 +55,9 @@ export const FormWordEnglishEditContext =
     setSavingDataApi: () => {},
     responseApi: {},
     setResponseApi: () => {},
+    //
+    parameterQuery: {},
+    setParameterQuery: () => {},
 
     //
     // setDataDictionaryToDataApi: () => {},
@@ -60,7 +69,7 @@ export const FormWordEnglishEditProvider = ({
   children: ReactNode;
 }) => {
   const intialized = useRef(false);
-  const { keyString, isAddNew } = useParams();
+  const { keyString, isAddNew, idFolderParent } = useParams();
   //
   const [dataDictionaryApi, setDataDictionaryApi] =
     useState<ResponseApiDictionaryType>({});
@@ -70,10 +79,16 @@ export const FormWordEnglishEditProvider = ({
   const [dataApi, setDataApi] = useState<WordEnglishType>({
     soid: uuidv4(),
   });
+  const [parameterQuery, setParameterQuery] = useState<ParameterQueryApiType>({
+    id: IdDriveFolder.word_default,
+  });
 
   useEffect(() => {
     if (intialized.current) return;
     intialized.current = true;
+
+    setParameterQuery({ ...parameterQuery, id: idFolderParent });
+
     fechDataApi();
     //
     return () => {
@@ -99,9 +114,15 @@ export const FormWordEnglishEditProvider = ({
   async function saveDataApi(isAddNew: boolean = false) {
     setSavingDataApi("saving");
     // console.log(JSON.stringify(dataApi));
+    const parameter: ParameterApiType[] = [];
+    parameter.push({
+      name: "id_folder_parent",
+      value: parameterQuery.id ?? "",
+    });
     const data = await PostRowData(
       `${UrlApi.api_app_words_english_create_update}`,
-      dataApi
+      dataApi,
+      parameter
     );
     // console.log(data);
     setResponseApi(data);
@@ -175,6 +196,9 @@ export const FormWordEnglishEditProvider = ({
         setSavingDataApi: setSavingDataApi,
         responseApi: responseApi,
         setResponseApi: setResponseApi,
+        //
+        parameterQuery: parameterQuery,
+        setParameterQuery: setParameterQuery,
       }}
     >
       {children}

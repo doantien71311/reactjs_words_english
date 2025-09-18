@@ -8,6 +8,7 @@ import {
   ToastContainer,
   Image,
   Stack,
+  Row,
 } from "react-bootstrap";
 import {
   FormWordEnglishEditContext,
@@ -19,6 +20,11 @@ import { ItemWordEnglishSentence } from "./ItemWordEnglishSentence";
 import { v4 as uuidv4 } from "uuid";
 import { getAudioTitle } from "../../../utils/utilsFunction";
 import imageCompression from "browser-image-compression";
+import {
+  TopicDriveFolderList,
+  type TopicDriveFolderType,
+} from "../../../model/TopicDriveFolder";
+import UrlApi from "../../../services/UrlApi";
 
 export const FormWordEnglishEdit = () => {
   const {
@@ -30,17 +36,29 @@ export const FormWordEnglishEdit = () => {
     saveNewDataApi,
     isSavingDataApi,
     responseApi,
+    parameterQuery,
+    setParameterQuery,
   } = useContext<FormWordEnglishEditContextProps>(FormWordEnglishEditContext);
 
   const [show, setShow] = useState(false);
   const audioIPA = useRef<HTMLAudioElement>(null);
   const [imageInfo, setImageInfo] = useState("");
+  const [listTopic] = useState<TopicDriveFolderType[]>(TopicDriveFolderList());
 
   useEffect(() => {
     setShow(isSavingDataApi == "saved");
   }, [isSavingDataApi]);
 
   //#region các hàm xử lý
+  const getClickTopic = (value: string) => {
+    if (value == (parameterQuery.id ?? "")) return "outline-primary";
+    return "outline-secondary";
+  };
+
+  const handleClickTopic = (value: string) => {
+    setParameterQuery({ ...parameterQuery, id: value });
+  };
+
   const onClickGetData = async () => {
     await fetchDataDictionaryApi();
   };
@@ -189,6 +207,31 @@ export const FormWordEnglishEdit = () => {
       </ToastContainer>
 
       <div></div>
+
+      <Form>
+        <Form.Group as={Row} className="m-1 align-items-center">
+          <Stack
+            as={Col}
+            sm={12}
+            md={10}
+            xl={11}
+            direction="horizontal"
+            style={{ overflowX: "auto", whiteSpace: "nowrap" }}
+            gap={1}
+          >
+            {listTopic.map((item) => (
+              <Button
+                variant={getClickTopic(item.id_drive_folder)}
+                disabled
+                className=""
+                onClick={() => handleClickTopic(item.id_drive_folder)}
+              >
+                <span>{item.name}</span>
+              </Button>
+            ))}
+          </Stack>
+        </Form.Group>
+      </Form>
 
       <Accordion
         className=""
@@ -415,7 +458,7 @@ export const FormWordEnglishEdit = () => {
       >
         <div className="ms-auto"></div>
 
-        <a href={`https://app-words-english.onrender.com/`}>
+        <a href={`${UrlApi.getHostHttp()}/*/*/${parameterQuery.id ?? ""}`}>
           <Button
             disabled={isSavingDataApi == "saving"}
             variant="success"
