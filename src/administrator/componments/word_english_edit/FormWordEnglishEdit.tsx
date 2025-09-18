@@ -458,7 +458,10 @@ export const FormWordEnglishEdit = () => {
       >
         <div className="ms-auto"></div>
 
-        <a href={`${UrlApi.getHostHttp()}/*/*/${parameterQuery.id ?? ""}`}>
+       
+
+
+         <a href={`${UrlApi.getHostHttp()}`}>
           <Button
             disabled={isSavingDataApi == "saving"}
             variant="success"
