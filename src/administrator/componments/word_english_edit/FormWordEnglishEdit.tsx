@@ -25,6 +25,7 @@ import {
   type TopicDriveFolderType,
 } from "../../../model/TopicDriveFolder";
 import UrlApi from "../../../services/UrlApi";
+import { useNavigate } from "react-router-dom";
 
 export const FormWordEnglishEdit = () => {
   const {
@@ -44,6 +45,7 @@ export const FormWordEnglishEdit = () => {
   const audioIPA = useRef<HTMLAudioElement>(null);
   const [imageInfo, setImageInfo] = useState("");
   const [listTopic] = useState<TopicDriveFolderType[]>(TopicDriveFolderList());
+  const navigate = useNavigate();
 
   useEffect(() => {
     setShow(isSavingDataApi == "saved");
@@ -129,6 +131,12 @@ export const FormWordEnglishEdit = () => {
   const handleChangeSaveDataApi = () => {
     saveDataApi();
   };
+
+  const handleChangeSaveBackDataApi = async () => {
+    await saveDataApi();
+    navigate("/");
+  };
+
   const handleChangeSaveNewDataApi = () => {
     saveNewDataApi();
   };
@@ -348,6 +356,7 @@ export const FormWordEnglishEdit = () => {
                   className=""
                   type="file"
                   accept="audio/*,audio/mp3,audio/m4a,audio/wav"
+                  style={{ overflow: "hidden", width: "100px" }}
                   onChange={(event) => handleFileChangeWordAudio(event)}
                 />
               </Stack>
@@ -419,6 +428,7 @@ export const FormWordEnglishEdit = () => {
                   className=""
                   type="file"
                   accept="image/*"
+                  style={{ overflow: "hidden", width: "100px" }}
                   onChange={(event) => handleFileChangeIllustrationImage(event)}
                 />
               </Stack>
@@ -454,14 +464,11 @@ export const FormWordEnglishEdit = () => {
         direction="horizontal"
         style={{ border: "1px solid back" }}
         gap={1}
-        className="w-100 m-0 fixed-bottom mx-auto"
+        className="w-100 m-0 fixed-bottom"
       >
         <div className="ms-auto"></div>
 
-       
-
-
-         <a href={`${UrlApi.getHostHttp()}`}>
+        <a href={`${UrlApi.getHostHttp()}`}>
           <Button
             disabled={isSavingDataApi == "saving"}
             variant="success"
@@ -502,14 +509,14 @@ export const FormWordEnglishEdit = () => {
           disabled={isSavingDataApi == "saving"}
           variant="success"
           size="sm"
-          onClick={() => handleChangeSaveDataApi()}
+          onClick={() => handleChangeSaveBackDataApi()}
         >
           <Stack>
             <i className="bi bi-arrow-left-circle"></i>
             <span>Save Back</span>
           </Stack>
         </Button>
-        <Button
+        {/* <Button
           disabled={isSavingDataApi == "saving"}
           variant="success"
           size="sm"
@@ -519,7 +526,7 @@ export const FormWordEnglishEdit = () => {
             <i className="bi bi-dash-circle"></i>
             <span>Save Draft</span>
           </Stack>
-        </Button>
+        </Button> */}
         <div className="ms-auto"></div>
       </Stack>
     </>
