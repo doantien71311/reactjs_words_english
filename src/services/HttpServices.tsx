@@ -130,12 +130,13 @@ export const GetRowData = <T,>(api: string, id: string): Promise<T> => {
 
 export const DeleteRowData = (
   api: string,
-  id: string
+  id: string,
+  id_folder_parent: string
 ): Promise<ResponseApiType> => {
   return new Promise<ResponseApiType>((resolve) => {
     getTokenString().then((token) => {
       // console.log(token);
-      const api_url_post = `${UrlApi.getApiHttp()}${api}/${id}`;
+      const api_url_post = `${UrlApi.getApiHttp()}${api}/${id}/123/${id_folder_parent}`;
       // console.log(api_url_post);
       fetch(api_url_post, {
         method: "DELETE",
