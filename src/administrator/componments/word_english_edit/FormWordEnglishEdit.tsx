@@ -26,6 +26,7 @@ import {
 } from "../../../model/TopicDriveFolder";
 import UrlApi from "../../../services/UrlApi";
 import { useNavigate } from "react-router-dom";
+import { GetAudioBaseSoundOfText } from "../../../services/HttpSoundTextServices";
 
 export const FormWordEnglishEdit = () => {
   const {
@@ -43,6 +44,7 @@ export const FormWordEnglishEdit = () => {
 
   const [show, setShow] = useState(false);
   const audioIPA = useRef<HTMLAudioElement>(null);
+  const intialized = useRef(false);
   const [imageInfo, setImageInfo] = useState("");
   const [listTopic] = useState<TopicDriveFolderType[]>(TopicDriveFolderList());
   const navigate = useNavigate();
@@ -50,6 +52,14 @@ export const FormWordEnglishEdit = () => {
   useEffect(() => {
     setShow(isSavingDataApi == "saved");
   }, [isSavingDataApi]);
+
+  useEffect(() => {
+    if (audioIPA.current && intialized.current) {
+      audioIPA.current.play();
+    }
+    intialized.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataApi.word_base_audio, intialized.current]);
 
   //#region các hàm xử lý
   const getClickTopic = (value: string) => {
@@ -70,6 +80,7 @@ export const FormWordEnglishEdit = () => {
       word_en: event,
     });
   };
+
   const handleChangeWordIPA = (event: string) => {
     setDataApi({
       ...dataApi,
@@ -85,7 +96,9 @@ export const FormWordEnglishEdit = () => {
         });
       })
       .then(() => {
-        audioIPA.current?.play();
+        // if (audioIPA.current) {
+        //   audioIPA.current.play();
+        // }
       });
   };
   const handleChangeWordTranslation = (event: string) => {
@@ -118,6 +131,17 @@ export const FormWordEnglishEdit = () => {
       });
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleWordGetAudio = async () => {
+    const base64String = await GetAudioBaseSoundOfText(dataApi.word_en ?? "");
+    setDataApi({
+      ...dataApi,
+      word_base_audio: base64String,
+    });
+    // if (audioIPA.current) {
+    //   audioIPA.current.play();
+    // }
   };
 
   // const handleChangeSentenceEn = (id: string, event: string) => {
@@ -338,6 +362,14 @@ export const FormWordEnglishEdit = () => {
                 File audio, 100KB
               </Form.Label> */}
               <Stack direction="horizontal" gap={3}>
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  className=""
+                  onClick={() => handleWordGetAudio()}
+                >
+                  <i className="bi bi-volume-down"></i>
+                </Button>
                 <a href={`https://soundoftext.com/`} target="_blank">
                   <Button size="sm" variant="outline-secondary">
                     <i className="bi bi-link"></i>

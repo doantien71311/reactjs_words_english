@@ -28,6 +28,8 @@ class UrlApi {
     "/api/app-words-english-get-file";
   static api_app_words_english_delete_file: string =
     "/api/app-words-english-delete-file";
+  static app_words_english_sound_of_text_audio_base: string =
+    "/api/app-words-english-sound-of-text-audio-base";
   //
   static api_v2_entries_en: string = "/api/v2/entries/en";
 }
