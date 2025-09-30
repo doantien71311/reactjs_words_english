@@ -14,7 +14,9 @@ class UrlApi {
   static getHostHttp = () => {
     return import.meta.env.VITE_host_http;
   };
-
+  static getApiSoundoftextHttp = () => {
+    return import.meta.env.VITE_api_soundoftext_http;
+  };
   static api_auth_token: string = "/api/auth-token";
   static api_app_words_english_create_update: string =
     "/api/app-words-english-create-update";
