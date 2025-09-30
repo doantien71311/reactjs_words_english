@@ -44,7 +44,7 @@ export const FormWordEnglishEdit = () => {
 
   const [show, setShow] = useState(false);
   const audioIPA = useRef<HTMLAudioElement>(null);
-  const intialized = useRef(false);
+  // const intialized = useRef(false);
   const [imageInfo, setImageInfo] = useState("");
   const [listTopic] = useState<TopicDriveFolderType[]>(TopicDriveFolderList());
   const navigate = useNavigate();
@@ -53,13 +53,13 @@ export const FormWordEnglishEdit = () => {
     setShow(isSavingDataApi == "saved");
   }, [isSavingDataApi]);
 
-  useEffect(() => {
-    if (audioIPA.current && intialized.current) {
-      audioIPA.current.play();
-    }
-    intialized.current = true;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataApi.word_base_audio, intialized.current]);
+  // useEffect(() => {
+  //   if (audioIPA.current && intialized.current) {
+  //     audioIPA.current.play();
+  //   }
+  //   intialized.current = true;
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [dataApi.word_base_audio, intialized.current]);
 
   //#region các hàm xử lý
   const getClickTopic = (value: string) => {
