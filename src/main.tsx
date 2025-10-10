@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+// import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
@@ -12,20 +12,20 @@ import { BERoute } from "./administrator/BERoute.tsx";
 // );
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}></Route>
-        <Route path="*" element={<BERoute />} />
+  // <StrictMode>
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<App />}></Route>
+      <Route path="*" element={<BERoute />} />
 
-        {/* <Route path="administrator/*" element={<RouteBackEnd />} /> */}
-        {/* <Route path="*" element={<RouteBackEnd />} />
+      {/* <Route path="administrator/*" element={<RouteBackEnd />} /> */}
+      {/* <Route path="*" element={<RouteBackEnd />} />
         <Route path="profile/:ma_nv" element={<Profile />} />
         <Route
           path="fukuda-son-dondathang/:ma_nv"  
           element={<FukudaSonDonDatHangIndex />}
         /> */}
-      </Routes>
-    </BrowserRouter>
-  </StrictMode>
+    </Routes>
+  </BrowserRouter>
+  // </StrictMode>
 );

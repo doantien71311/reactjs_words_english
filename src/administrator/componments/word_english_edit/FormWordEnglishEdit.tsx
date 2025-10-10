@@ -278,7 +278,11 @@ export const FormWordEnglishEdit = () => {
           </Accordion.Header>
           <Accordion.Body>
             <InputGroup className="mt-1 mb-1">
-              <InputGroup.Text className="text-xl text-success fw-bold">
+              <InputGroup.Text
+                role="button"
+                className="text-xl text-success fw-bold"
+                onClick={() => onClickGetData()}
+              >
                 WOR
               </InputGroup.Text>
               <Form.Control
@@ -289,6 +293,13 @@ export const FormWordEnglishEdit = () => {
                 value={dataApi.word_en ?? ""}
                 onChange={(event) => handleChangeWordEn(event.target.value)}
               />
+              <Button
+                className=""
+                variant="outline-secondary"
+                onClick={() => onCoppData()}
+              >
+                <i className="bi bi-copy"></i>
+              </Button>
             </InputGroup>
 
             <InputGroup className="mt-1 mb-1">
@@ -307,7 +318,13 @@ export const FormWordEnglishEdit = () => {
             </InputGroup>
             <InputGroup className="mt-1 mb-1">
               <InputGroup.Text className="text-warning fw-bold">
-                TRA
+                <a
+                  className="text-warning"
+                  href={`https://vdict.com/${dataApi.word_en ?? ""},1,0,0.html`}
+                  target="_blank"
+                >
+                  TRA
+                </a>
               </InputGroup.Text>
               <Form.Control
                 type="text"
@@ -320,7 +337,7 @@ export const FormWordEnglishEdit = () => {
                 }
               />
             </InputGroup>
-            <Stack direction="horizontal" gap={3}>
+            {/* <Stack direction="horizontal" gap={3}>
               <div className="ms-auto"> </div>
               <Button
                 className=""
@@ -346,7 +363,7 @@ export const FormWordEnglishEdit = () => {
                 <i className="bi bi-copy"></i>
               </Button>
               <div className="ms-auto"> </div>
-            </Stack>
+            </Stack> */}
           </Accordion.Body>
         </Accordion.Item>
 
