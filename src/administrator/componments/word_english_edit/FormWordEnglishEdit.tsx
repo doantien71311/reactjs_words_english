@@ -278,13 +278,6 @@ export const FormWordEnglishEdit = () => {
           </Accordion.Header>
           <Accordion.Body>
             <InputGroup className="mt-1 mb-1">
-              <InputGroup.Text
-                role="button"
-                className="text-xl text-success fw-bold"
-                onClick={() => onClickGetData()}
-              >
-                WOR
-              </InputGroup.Text>
               <Form.Control
                 size="lg"
                 type="text"
@@ -293,19 +286,16 @@ export const FormWordEnglishEdit = () => {
                 value={dataApi.word_en ?? ""}
                 onChange={(event) => handleChangeWordEn(event.target.value)}
               />
-              <Button
-                className=""
-                variant="outline-secondary"
-                onClick={() => onCoppData()}
+              <InputGroup.Text
+                role="button"
+                className="text-xl text-success fw-bold"
+                onClick={() => onClickGetData()}
               >
-                <i className="bi bi-copy"></i>
-              </Button>
+                WOR
+              </InputGroup.Text>
             </InputGroup>
 
             <InputGroup className="mt-1 mb-1">
-              <InputGroup.Text className="text-xl text-info fw-bold">
-                IPA
-              </InputGroup.Text>
               <Form.Control
                 type="text"
                 size="lg"
@@ -315,17 +305,11 @@ export const FormWordEnglishEdit = () => {
                 onChange={(event) => handleChangeWordIPA(event.target.value)}
                 className="text-center text-xl text-info fw-bold"
               />
+              <InputGroup.Text className="text-xl text-info fw-bold">
+                IPA
+              </InputGroup.Text>
             </InputGroup>
             <InputGroup className="mt-1 mb-1">
-              <InputGroup.Text className="text-warning fw-bold">
-                <a
-                  className="text-warning"
-                  href={`https://vdict.com/${dataApi.word_en ?? ""},1,0,0.html`}
-                  target="_blank"
-                >
-                  TRA
-                </a>
-              </InputGroup.Text>
               <Form.Control
                 type="text"
                 size="lg"
@@ -336,6 +320,15 @@ export const FormWordEnglishEdit = () => {
                   handleChangeWordTranslation(event.target.value)
                 }
               />
+              <InputGroup.Text className="text-warning fw-bold">
+                <a
+                  className="text-warning"
+                  href={`https://vdict.com/${dataApi.word_en ?? ""},1,0,0.html`}
+                  target="_blank"
+                >
+                  TRA
+                </a>
+              </InputGroup.Text>
             </InputGroup>
             {/* <Stack direction="horizontal" gap={3}>
               <div className="ms-auto"> </div>
@@ -449,19 +442,57 @@ export const FormWordEnglishEdit = () => {
               <Form.Label className="text-sm-left">
                 {`File image (JPG) 1000px-1000px, 200KB; compress ${imageInfo}`}
               </Form.Label>
-              <Stack className="mb-3 mt-1" direction="horizontal" gap={3}>
-                <a href={`https://www.freepik.com/`} target="_blank">
-                  <Button size="sm" variant="outline-secondary">
+              <Stack className="mb-3 mt-1" direction="horizontal" gap={2}>
+                <Button
+                  className=""
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={() => onCoppData()}
+                >
+                  <i className="bi bi-copy"></i>
+                  {/* https://www.freepik.com/search?format=search&last_filter=type&last_value=photo&query=laptop&selection=1&type=photo */}
+                </Button>
+                <a
+                  href={`https://www.freepik.com/search?format=search&last_filter=type&last_value=photo&query=${
+                    dataApi.word_en ?? ""
+                  }&selection=1&type=photo `}
+                  target="_blank"
+                >
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={() => onCoppData()}
+                  >
                     <i className="bi bi-link"></i>
                   </Button>
                 </a>
-                <a href={`https://www.pexels.com/`} target="_blank">
-                  <Button size="sm" variant="outline-secondary">
+                {/* https://www.pexels.com/search/school/ */}
+                <a
+                  href={`https://www.pexels.com/search/${
+                    dataApi.word_en ?? ""
+                  }`}
+                  target="_blank"
+                >
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={() => onCoppData()}
+                  >
                     <i className="bi bi-link"></i>
                   </Button>
                 </a>
-                <a href={`https://pixabay.com/`} target="_blank">
-                  <Button size="sm" variant="outline-secondary">
+                {/* https://pixabay.com/images/search/house/ */}
+                <a
+                  href={`https://pixabay.com/images/search/${
+                    dataApi.word_en ?? ""
+                  }/`}
+                  target="_blank"
+                >
+                  <Button
+                    size="sm"
+                    variant="outline-secondary"
+                    onClick={() => onCoppData()}
+                  >
                     <i className="bi bi-link"></i>
                   </Button>
                 </a>
