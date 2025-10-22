@@ -44,10 +44,21 @@ export const FormWordEnglishEdit = () => {
 
   const [show, setShow] = useState(false);
   const audioIPA = useRef<HTMLAudioElement>(null);
+  const [statusGetData, setStatusGetData] = useState("");
+
   // const intialized = useRef(false);
   const [imageInfo, setImageInfo] = useState("");
   const [listTopic] = useState<TopicDriveFolderType[]>(TopicDriveFolderList());
   const navigate = useNavigate();
+  //
+  const status_get_data_loading = "status_get_data_loading";
+  const status_get_data_loaded = "status_get_data_loaded";
+  //
+  const getStatusGetData = (): boolean => {
+    if (statusGetData == status_get_data_loaded) return false;
+    if (statusGetData == "") return false;
+    else return true;
+  };
 
   useEffect(() => {
     setShow(isSavingDataApi == "saved");
@@ -72,7 +83,9 @@ export const FormWordEnglishEdit = () => {
   };
 
   const onClickGetData = async () => {
+    setStatusGetData(status_get_data_loading);
     await fetchDataDictionaryApi();
+    setStatusGetData(status_get_data_loaded);
   };
   const handleChangeWordEn = (event: string) => {
     setDataApi({
@@ -283,6 +296,7 @@ export const FormWordEnglishEdit = () => {
                 type="text"
                 className="text-center text-xl text-lowercase text-success fw-bold"
                 placeholder=""
+                disabled={getStatusGetData()}
                 value={dataApi.word_en ?? ""}
                 onChange={(event) => handleChangeWordEn(event.target.value)}
               />
