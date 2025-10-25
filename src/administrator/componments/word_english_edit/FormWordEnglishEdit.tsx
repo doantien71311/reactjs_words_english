@@ -24,7 +24,7 @@ import {
   TopicDriveFolderList,
   type TopicDriveFolderType,
 } from "../../../model/TopicDriveFolder";
-import UrlApi from "../../../services/UrlApi";
+// import UrlApi from "../../../services/UrlApi";
 import { useNavigate } from "react-router-dom";
 import { GetAudioBaseSoundOfText } from "../../../services/HttpSoundTextServices";
 
@@ -171,7 +171,8 @@ export const FormWordEnglishEdit = () => {
 
   const handleChangeSaveBackDataApi = async () => {
     await saveDataApi();
-    navigate("/");
+    // navigate("/");
+    navigate(-1);
   };
 
   const handleChangeSaveNewDataApi = () => {
@@ -562,7 +563,8 @@ export const FormWordEnglishEdit = () => {
       >
         <div className="ms-auto"></div>
 
-        <a href={`${UrlApi.getHostHttp()}`}>
+        {/* <a href={`${UrlApi.getHostHttp()}`}> */}
+        <a href="/">
           <Button
             disabled={isSavingDataApi == "saving"}
             variant="success"
