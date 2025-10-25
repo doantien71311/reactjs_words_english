@@ -39,6 +39,7 @@ jobs:
           # Upload entire repository
           # path: '.'
           path: "./dist_git"
+          publish_dir: ./dist_git
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
