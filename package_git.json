@@ -9,8 +9,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build-git": "tsc -b && vite build --config vite.config.app_git.ts",
-    "build-all": "tsc -b && vite build && npm run build-git"
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "bootstrap": "^5.3.7",
