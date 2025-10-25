@@ -4,7 +4,7 @@ import { resolve } from "path";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/wordsenglish",
+  base: "/reactjs_words_english",
   //
   //Tiến thêm vào để giảu quyết quill
   build: {
