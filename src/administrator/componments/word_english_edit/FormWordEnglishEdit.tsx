@@ -563,20 +563,22 @@ export const FormWordEnglishEdit = () => {
       >
         <div className="ms-auto"></div>
 
-        {/* <a href={`${UrlApi.getHostHttp()}`}> */}
-        <a href="/">
-          <Button
-            disabled={isSavingDataApi == "saving"}
-            variant="success"
-            // className="m-10"
-            size="sm"
-          >
-            <Stack>
-              <i className="bi bi-chevron-left"></i>
-              <span>Back</span>
-            </Stack>
-          </Button>
-        </a>
+        {/* <a href={`${UrlApi.getHostHttp()}`}>  </a> */}
+
+        <Button
+          disabled={isSavingDataApi == "saving"}
+          variant="success"
+          // className="m-10"
+          size="sm"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          <Stack>
+            <i className="bi bi-chevron-left"></i>
+            <span>Back</span>
+          </Stack>
+        </Button>
 
         <Button
           disabled={isSavingDataApi == "saving"}
