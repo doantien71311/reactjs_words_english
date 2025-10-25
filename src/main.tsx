@@ -30,7 +30,7 @@ createRoot(document.getElementById("root")!).render(
   //   </Routes>
   // </BrowserRouter>
 
-  <BrowserRouter basename="wordsenglish">
+  <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}></Route>
       {/* <Route path="/" index element={<EnglishDisplayIndex />} /> */}
