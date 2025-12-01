@@ -1,48 +1,68 @@
 import { useEffect, useRef } from "react";
-// import "./App.css";
-// import { getTokenString } from "./services/HttpServices";
-// import { GetWords } from "./services/HttpDictionaryServices";
-// import { GetAudioBaseStringByLink } from "./services/HttpGetFileServices";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { EnglishDisplayIndex } from "./administrator/componments/word_english_display/EnglishDisplayIndex";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+const CLIENT_ID =
+  "333770945451-t5i9hsfdh7q7fl6vqb6n10snk552l18g.apps.googleusercontent.com";
+import { jwtDecode, type JwtPayload } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import SessionStorageKey from "./administrator/SessionStorageKey";
+
+interface GoogleJwtPayload extends JwtPayload {
+  email?: string;
+  name?: string;
+  picture?: string;
+}
 
 function App() {
   // const [audioValue, setAudioVallue] = useState("");
   const initialized = useRef(false);
 
-  async function fetchData() {
-    // const data = await getTokenString();
-    // console.log(data);
-  }
-
-  async function fetchDataDic() {
-    //const data = await GetWords("sink");
-    // console.log(data);
-  }
-
-  async function fetchDataAudio() {
-    // const data = await GetAudioBaseStringByLink(
-    //   "https://api.dictionaryapi.dev/media/pronunciations/en/sink-us.mp3"
-    // );
-    // setAudioVallue(data);
-    //console.log(data);
-  }
-
   useEffect(() => {
     if (initialized.current) return;
     initialized.current = true;
-    fetchData();
-    fetchDataDic();
-    fetchDataAudio();
     return () => {
       console.log("App: useEffect - count - cleanup");
     };
   }, []);
 
+  const navigate = useNavigate();
+
   return (
     <>
-      <EnglishDisplayIndex></EnglishDisplayIndex>
+      <GoogleOAuthProvider clientId={CLIENT_ID}>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            const token = credentialResponse.credential;
+            if (token == null) {
+              console.log("No token received");
+              return;
+            }
+            const userInfo = jwtDecode<GoogleJwtPayload>(token);
+            console.log("User Info:", userInfo);
+            if (userInfo == null || userInfo.email == null) {
+              console.log("Failed to decode token");
+              return;
+            }
+            if (
+              userInfo.email === import.meta.env.VITE_mr_tien_gmail ||
+              userInfo.email === import.meta.env.VITE_mr_tien_developer_gmail
+            ) {
+              sessionStorage.setItem(
+                SessionStorageKey.TokenEmail,
+                userInfo.email!
+              );
+              navigate("/");
+            }
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
+      </GoogleOAuthProvider>
+
+      {/* <EnglishDisplayIndex></EnglishDisplayIndex> */}
+
       {/* <FormWordEnglishIndex></FormWordEnglishIndex> */}
       {/* <div>{audioValue}</div>
       <audio controls src={audioValue}></audio>
