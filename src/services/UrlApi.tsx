@@ -18,6 +18,7 @@ class UrlApi {
     return import.meta.env.VITE_api_soundoftext_http;
   };
   static api_auth_token: string = "/api/auth-token";
+  //
   static api_app_words_english_create_update: string =
     "/api/app-words-english-create-update";
   static api_app_words_english_get_list: string =
@@ -30,6 +31,14 @@ class UrlApi {
     "/api/app-words-english-delete-file";
   static app_words_english_sound_of_text_audio_base: string =
     "/api/app-words-english-sound-of-text-audio-base";
+  //
+  static api_app_words_english_topic_get_list: string =
+    "/api/app-words-english-topic-get-list";
+  static api_app_words_english_topic_get_file: string =
+    "/api/app-words-english-topic-get-file";
+ static api_app_words_english_topic_create_update: string =
+    "/api/app-words-english-topic-create-update";
+
   //
   static api_v2_entries_en: string = "/api/v2/entries/en";
 }

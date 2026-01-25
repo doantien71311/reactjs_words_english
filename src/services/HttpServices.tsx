@@ -45,6 +45,7 @@ export const PostRowData = <T,>(
         parameterQuery = `?${parameterQuery}`;
       }
       const api_url_post = `${UrlApi.getApiHttp()}${api}${parameterQuery}`;
+      console.log(api_url_post);
       fetch(api_url_post, {
         method: "POST",
         headers: {
@@ -109,6 +110,7 @@ export const GetRowData = <T,>(api: string, id: string): Promise<T> => {
   return new Promise<T>((resolve) => {
     getTokenString().then((token) => {
       const api_url_post = `${UrlApi.getApiHttp()}${api}?id=${id}`;
+      console.log(api_url_post);
       fetch(api_url_post, {
         method: "GET",
         headers: {
