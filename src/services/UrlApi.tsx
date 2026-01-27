@@ -40,6 +40,12 @@ class UrlApi {
     "/api/app-words-english-topic-create-update";
 
   //
+  static api_app_words_english_word_topic_get_list: string =
+    "/api/app-words-english-word-topic-get-list";
+   static api_app_words_english_word_topic_create_delete: string =
+    "/api/app-words-english-word-topic-create-delete";
+  //
+
   static api_v2_entries_en: string = "/api/v2/entries/en";
 }
 export default UrlApi;
